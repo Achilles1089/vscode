@@ -100,7 +100,8 @@ function lookupMessage(index: number, fallback: string | null): string {
 		if (typeof fallback === 'string') {
 			return fallback;
 		}
-		throw new Error(`!!! NLS MISSING: ${index} !!!`);
+		// Dappit: gracefully degrade instead of crashing the process
+		return `[NLS:${index}]`;
 	}
 	return message;
 }

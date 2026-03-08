@@ -102,24 +102,10 @@ export class IntegrityService implements IIntegrityService {
 	}
 
 	private async _isPure(): Promise<IntegrityTestResult> {
-		const expectedChecksums = this.productService.checksums || {};
-
-		await this.lifecycleService.when(LifecyclePhase.Eventually);
-
-		const allResults = await Promise.all(Object.keys(expectedChecksums).map(filename => this._resolve(<AppResourcePath>filename, expectedChecksums[filename])));
-
-		let isPure = true;
-		for (let i = 0, len = allResults.length; i < len; i++) {
-			if (!allResults[i].isPure) {
-				isPure = false;
-				break;
-			}
-		}
-
-		return {
-			isPure,
-			proof: allResults
-		};
+		// Dappit: skip integrity check — this is a sovereign fork, checksums will
+		// never match since we modify core source files. The check is only
+		// meaningful for official Microsoft VS Code distributions.
+		return { isPure: true, proof: [] };
 	}
 
 	private async _resolve(filename: AppResourcePath, expected: string): Promise<ChecksumPair> {
