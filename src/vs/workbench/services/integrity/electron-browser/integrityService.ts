@@ -6,14 +6,14 @@
 import { localize } from '../../../../nls.js';
 import Severity from '../../../../base/common/severity.js';
 import { URI } from '../../../../base/common/uri.js';
-import { ChecksumPair, IIntegrityService, IntegrityTestResult } from '../common/integrity.js';
-import { ILifecycleService, LifecyclePhase } from '../../lifecycle/common/lifecycle.js';
+import { IIntegrityService, IntegrityTestResult } from '../common/integrity.js';
+import { ILifecycleService } from '../../lifecycle/common/lifecycle.js';
 import { IProductService } from '../../../../platform/product/common/productService.js';
 import { INotificationService, NotificationPriority } from '../../../../platform/notification/common/notification.js';
 import { IStorageService, StorageScope, StorageTarget } from '../../../../platform/storage/common/storage.js';
 import { InstantiationType, registerSingleton } from '../../../../platform/instantiation/common/extensions.js';
 import { IOpenerService } from '../../../../platform/opener/common/opener.js';
-import { FileAccess, AppResourcePath } from '../../../../base/common/network.js';
+
 import { IChecksumService } from '../../../../platform/checksum/common/checksumService.js';
 import { ILogService } from '../../../../platform/log/common/log.js';
 
@@ -67,10 +67,10 @@ export class IntegrityService implements IIntegrityService {
 	constructor(
 		@INotificationService private readonly notificationService: INotificationService,
 		@IStorageService storageService: IStorageService,
-		@ILifecycleService private readonly lifecycleService: ILifecycleService,
+		@ILifecycleService _lifecycleService: ILifecycleService,
 		@IOpenerService private readonly openerService: IOpenerService,
 		@IProductService private readonly productService: IProductService,
-		@IChecksumService private readonly checksumService: IChecksumService,
+		@IChecksumService _checksumService: IChecksumService,
 		@ILogService private readonly logService: ILogService
 	) {
 		this.storage = new IntegrityStorage(storageService);
@@ -108,26 +108,6 @@ export class IntegrityService implements IIntegrityService {
 		return { isPure: true, proof: [] };
 	}
 
-	private async _resolve(filename: AppResourcePath, expected: string): Promise<ChecksumPair> {
-		const fileUri = FileAccess.asFileUri(filename);
-
-		try {
-			const checksum = await this.checksumService.checksum(fileUri);
-
-			return IntegrityService._createChecksumPair(fileUri, checksum, expected);
-		} catch (error) {
-			return IntegrityService._createChecksumPair(fileUri, '', expected);
-		}
-	}
-
-	private static _createChecksumPair(uri: URI, actual: string, expected: string): ChecksumPair {
-		return {
-			uri: uri,
-			actual: actual,
-			expected: expected,
-			isPure: (actual === expected)
-		};
-	}
 
 	private _showNotification(): void {
 		const checksumFailMoreInfoUrl = this.productService.checksumFailMoreInfoUrl;
