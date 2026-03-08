@@ -1,11 +1,14 @@
 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <mask id="m">
+    <mask id="eyes">
       <rect width="24" height="24" fill="black"/>
-      <rect x="2" y="3" width="20" height="19" rx="6" fill="white"/>
-      <ellipse cx="8.5" cy="13" rx="2.2" ry="3.2" fill="black"/>
-      <ellipse cx="15.5" cy="13" rx="2.2" ry="3.2" fill="black"/>
+      <!-- Oblong blob body - taller rounded shape like Dappit mascot -->
+      <path d="M12 2C7.5 2 3 5.5 3 10V16C3 19.5 6.5 22 12 22C17.5 22 21 19.5 21 16V10C21 5.5 16.5 2 12 2Z" fill="white"/>
+      <!-- Left eye - rounded tall oval -->
+      <rect x="6.5" y="10" width="4" height="6" rx="2" fill="black"/>
+      <!-- Right eye - rounded tall oval -->
+      <rect x="13.5" y="10" width="4" height="6" rx="2" fill="black"/>
     </mask>
   </defs>
-  <rect width="24" height="24" fill="currentColor" mask="url(#m)"/>
+  <rect width="24" height="24" fill="currentColor" mask="url(#eyes)"/>
 </svg>
